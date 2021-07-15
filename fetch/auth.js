@@ -1,4 +1,4 @@
-const BASE = 'https://auth.shanmukeshwar.ml/'
+const BASE = 'https://auth.shnm.ml/'
 
 export const login = async (payload) => {
   const response = await fetch(BASE + 'login', {
