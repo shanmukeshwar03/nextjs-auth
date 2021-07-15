@@ -1,0 +1,138 @@
+.form__container {
+  border: 1px solid #ccc;
+  padding: 1.4rem 1.2rem;
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  box-shadow: 2px 2px 1px 1px #ccccccd8;
+  width: 27vw;
+  overflow: hidden;
+  position: relative;
+}
+
+.form__container .tint {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0 0 0 0;
+  background-color: #ffffff5d;
+  z-index: 1;
+}
+
+.form__container .loading {
+  height: 5px;
+  width: 70%;
+  background-color: #0072ff;
+  margin: -1.4rem -1.2rem 0 -1.2rem;
+  animation: load 1500ms linear infinite forwards reverse;
+  z-index: 999;
+}
+
+.form__container header {
+  color: white;
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 0.3rem;
+  margin: -1.4rem -1.2rem 0 -1.2rem;
+  animation: inflate 300ms ease;
+}
+
+.form__container .form__error {
+  background-color: #f6060a;
+}
+
+.form__container .form__success {
+  background-color: #6cc507;
+}
+
+.form__container h1 {
+  margin-bottom: 1rem;
+  color: #0e0e0ed7;
+  text-align: center;
+  animation: slide 300ms ease;
+}
+
+.form__container label {
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+  margin-top: 0.7rem;
+  animation: slide 300ms ease;
+  color: #0e0e0ec0;
+}
+
+.form__container > div {
+  border: 1px solid #ccc;
+  padding: 0.5rem 0.7rem;
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
+  animation: slide 300ms ease;
+}
+
+.form__container img {
+  width: 23px;
+  height: 23px;
+  cursor: pointer;
+  animation: slide 300ms ease;
+}
+
+.form__container input {
+  font-size: 1.4rem;
+  letter-spacing: 1.2px;
+  width: 95%;
+  animation: slide 300ms ease;
+  color: #0e0e0eb6;
+}
+
+.form__container button {
+  padding: 0.5rem 0.7rem;
+  width: fit-content;
+  background-color: #0072ff;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: auto;
+  animation: slide 300ms ease;
+}
+
+.form__container footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  animation: slide 300ms ease;
+}
+
+.form__container span {
+  text-align: center;
+  font-size: 1.1rem;
+  animation: slide 300ms ease;
+}
+
+@keyframes slide {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes load {
+  0% {
+    transform: translateX(200%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes inflate {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
