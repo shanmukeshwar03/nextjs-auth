@@ -1,73 +1,86 @@
-import Form from 'components/Form'
-import { useRouter } from 'next/router'
-import { resetpassword } from 'fetch/auth'
-import { useRef, useState } from 'react'
+import { useEffect, useState } from "react";
+import Input from "components/Input";
+import Loading from "components/Loading";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import Helpers from "helpers";
+import axios from "axios";
 
 const ResetPassword = () => {
-  const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState('')
-  const passwordRef = useRef('')
-  const passwordConfirmRef = useRef('')
-  const router = useRouter()
+  const [showPassword, setShowPassword] = useState(false);
+  const [meta, setMeta] = useState({ type: null, message: null });
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const checkPasswords = () => {
-    return passwordRef.current.value === passwordConfirmRef.current.value
-  }
+  const [credentials, setCredentials] = useState({ password: "" });
+
+  const [errors, setErrors] = useState({
+    password: null,
+    footer: null,
+  });
+
+  const handleChange = (event) => {
+    setCredentials({ ...credentials, [event.target.name]: event.target.value });
+  };
 
   const onSubmit = async (event) => {
-    event.preventDefault()
-    setError('')
-    setSuccess('')
-    const result = checkPasswords()
-    if (!result) return setError(`Passwords did't match`)
-
-    setLoading(true)
-    const payload = {
-      password: passwordRef.current.value
+    event.preventDefault();
+    if (!Helpers.isPassword(credentials.password)) {
+      setErrors({ password: "Wrong password" });
+      return;
     }
-    const response = await resetpassword(payload, router.query.token)
-    if (response.failed) setError(response.failed)
-    else setSuccess('Password Changed')
-    setLoading(false)
-  }
+    setLoading(true);
+    try {
+      const response = await axios.post("/auth/resetpassword", {
+        ...credentials,
+        token: router.query.token,
+      });
+      if (response.data === "Ok")
+        setMeta({
+          type: "success",
+          message: "Your password has updated sucessfully!",
+        });
+    } catch (error) {
+      const errors = error.response.data;
+      if (errors.password) setErrors(errors);
+      else setMeta({ type: "failed", message: errors });
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    setErrors({});
+  }, [credentials]);
 
   return (
-    <Form
-      title='Reset Password'
-      onSubmit={onSubmit}
-      error={error}
-      loading={loading}
-      success={success}
-    >
-      <label>Password</label>
-      <div>
-        <input
-          required
-          type={showPassword ? 'text' : 'password'}
-          ref={passwordRef}
+    <div className="rp-container">
+      <img src="/icons/login.svg" />
+      <form className="rp-form" onSubmit={onSubmit}>
+        <div className="rp-header">
+          <span>Reset Password</span>
+          {meta.type && (
+            <span className={meta.type === "failed" ? "rp-error" : null}>
+              {meta.message}
+            </span>
+          )}
+        </div>
+        <Input
+          label="password"
+          icon
+          error={errors.password}
+          value={credentials.password}
+          onChange={handleChange}
+          placeholder="Enter your new password"
+          isPassword={showPassword ? "eye-open" : "eye-close"}
+          togglePassword={() => setShowPassword(!showPassword)}
         />
-        <img
-          src={showPassword ? '/icons/eye-close.svg' : '/icons/eye-open.svg'}
-          onClick={() => setShowPassword(!showPassword)}
-        />
-      </div>
-      <label>Confirm Password</label>
-      <div>
-        <input
-          required
-          type={showPassword ? 'text' : 'password'}
-          ref={passwordConfirmRef}
-        />
-        <img
-          src={showPassword ? '/icons/eye-close.svg' : '/icons/eye-open.svg'}
-          onClick={() => setShowPassword(!showPassword)}
-        />
-      </div>
-      <button type='submit'>Reset</button>
-    </Form>
-  )
-}
+        <div className="rp-footer">
+          <Link href="/login">Login?</Link>
+          <button>{loading ? <Loading type="button" /> : "Reset"}</button>
+        </div>
+      </form>
+    </div>
+  );
+};
 
-export default ResetPassword
+export default ResetPassword;

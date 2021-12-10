@@ -1,0 +1,46 @@
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 90%;
+}
+
+.input-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-header :first-child {
+  font-size: 1.4rem;
+  text-transform: capitalize;
+  color: #263238;
+}
+
+.input-header :nth-child(2) {
+  font-size: 1rem;
+  color: #ff5722;
+}
+
+.text-input {
+  border: 1px solid #ccc;
+  padding: 9px;
+  border-radius: 5px;
+  display: flex;
+  gap: 1rem;
+}
+
+.text-input img {
+  filter: invert(38%) sepia(0%) saturate(1696%) hue-rotate(174deg)
+    brightness(94%) contrast(87%);
+}
+
+.text-input :last-child {
+  cursor: pointer;
+}
+
+.text-input input {
+  width: 100%;
+  font-size: 1.2rem;
+  color: #424242;
+  background-color: transparent;
+}

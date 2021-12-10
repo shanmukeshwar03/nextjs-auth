@@ -1,41 +1,78 @@
-import Form from 'components/Form'
-import { forgotpassword } from 'fetch/auth'
-import { useRef, useState } from 'react'
+import { useEffect, useState } from "react";
+import Input from "components/Input";
+import Loading from "components/Loading";
+import Link from "next/link";
+import Helpers from "helpers";
+import axios from "axios";
 
 const ForgotPassword = () => {
-  const emailRef = useRef('')
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [meta, setMeta] = useState({ type: null, message: null });
+
+  const [credentials, setCredentials] = useState({ email: "" });
+
+  const [errors, setErrors] = useState({
+    email: null,
+    footer: null,
+  });
+
+  const handleChange = (event) => {
+    setCredentials({ ...credentials, [event.target.name]: event.target.value });
+  };
 
   const onSubmit = async (event) => {
-    event.preventDefault()
-    setLoading(true)
-    setError('')
-    setSuccess('')
-    const payload = {
-      email: emailRef.current.value
+    event.preventDefault();
+    setMeta({});
+    if (!Helpers.isEmail(credentials.email)) {
+      setErrors({ ...errors, email: "Invalid Email" });
+      return;
     }
-    const response = await forgotpassword(payload)
-    if (response.failed) setError(response.failed)
-    else setSuccess('A reset link has sent to your email')
-    setLoading(false)
-  }
+    setLoading(true);
+    try {
+      const response = await axios.post("/auth/forgotpassword", credentials);
+      if (response.data === "Ok")
+        setMeta({ type: "success", message: "Please check your email" });
+    } catch (error) {
+      const errors = error.response.data;
+      if (errors.email) setErrors(errors);
+      else setMeta({ type: "failed", message: errors });
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    setErrors({});
+  }, [credentials]);
 
   return (
-    <Form
-      title='Forgot Password'
-      onSubmit={onSubmit}
-      error={error}
-      success={success}
-      loading={loading}
-    >
-      <label>Email</label>
-      <div>
-        <input required type='email' ref={emailRef} />
-      </div>
-      <button type='submit'>submit</button>
-    </Form>
-  )
-}
-export default ForgotPassword
+    <div className="fp-container">
+      <img src="/icons/login.svg" />
+      <form className="fp-form" onSubmit={onSubmit}>
+        <div className="fp-header">
+          <span>Forgot Password</span>
+          {meta.type && (
+            <span className={meta.type === "failed" ? "fp-error" : null}>
+              {meta.message}
+            </span>
+          )}
+        </div>
+        <Input
+          label="email"
+          icon
+          error={errors.email}
+          value={credentials.email}
+          onChange={handleChange}
+          placeholder="yourname@host.com"
+        />
+        <div className="fp-footer">
+          <Link href="/login">Login?</Link>
+          <button disabled={loading}>
+            {loading ? <Loading type="button" /> : "Request Reset"}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default ForgotPassword;

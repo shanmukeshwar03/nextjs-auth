@@ -1,18 +1,4 @@
-const BASE = "https://auth.shanmukeshwar.me/";
-
-export const login = async (payload) => {
-  const response = await fetch(BASE + "login", {
-    headers: { "Content-Type": "application/json" },
-    method: "post",
-    body: JSON.stringify(payload),
-    credentials: "include",
-  }).then(async (res) => {
-    if (res.ok) return { success: true };
-    else return { failed: await res.text() };
-  });
-
-  return response;
-};
+const BASE = process.env.NEXT_PUBLIC_HOST_URL;
 
 export const register = async (payload) => {
   const response = await fetch(BASE + "register", {

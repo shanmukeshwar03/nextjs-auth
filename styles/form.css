@@ -1,11 +1,10 @@
 .form__container {
-  border: 1px solid #ccc;
+  border: 1px solid #eeeeee;
   padding: 1.4rem 1.2rem;
-  border-radius: 7px;
+  border-radius: 18px;
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
-  box-shadow: 2px 2px 1px 1px #ccccccd8;
   width: 27vw;
   overflow: hidden;
   position: relative;
