@@ -12,7 +12,7 @@ import "styles/forgotpassword.css";
 import "styles/resetpassword.css";
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_HOST_URL;
+axios.defaults.baseURL = process.env.HOST_URL;
 
 const App = ({ Component }) => {
   return <Component />;
