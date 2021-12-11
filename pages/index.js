@@ -12,7 +12,7 @@ const Home = () => {
   const checkLoggedIn = async () => {
     try {
       const response = await axios.get("/auth/verifyToken");
-      const user = response.data.user;
+      const user = response.data;
       if (!user) throw {};
       localStorage.setItem("user", JSON.stringify(user));
       router.replace("/home");
