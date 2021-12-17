@@ -1,6 +1,7 @@
 import Loading from "components/Loading";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -15,9 +16,14 @@ const Home = () => {
     setLoading(false);
   };
 
-  const logout = () => {
-    localStorage.clear();
-    router.replace("/login");
+  const logout = async () => {
+    try {
+      await axios.get("/auth/logout");
+      localStorage.clear();
+      router.replace("/login");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const deleteUser = async () => {
@@ -37,7 +43,7 @@ const Home = () => {
           Hello , <span>{user.name}</span>
         </h3>
         <button className="home-warning" onClick={deleteUser}>
-          Delete my account
+          Deregister
         </button>
       </div>
       <div className="home-body">
