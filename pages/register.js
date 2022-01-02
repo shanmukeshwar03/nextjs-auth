@@ -14,13 +14,11 @@ const Register = () => {
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
-    name: "",
     username: "",
   });
   const [errors, setErrors] = useState({
     email: null,
     password: null,
-    name: null,
     username: null,
   });
 
@@ -31,10 +29,6 @@ const Register = () => {
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    if (credentials.name.length < 6) {
-      setErrors({ ...errors, name: "Invalid name" });
-      return;
-    }
     if (credentials.username.length < 3) {
       setErrors({ ...errors, username: "Invalid username" });
       return;
@@ -44,7 +38,7 @@ const Register = () => {
       return;
     }
     if (credentials.password.length < 6) {
-      setErrors({ ...errors, password: "Wrong password" });
+      setErrors({ ...errors, password: "Invalid password" });
       return;
     }
 
@@ -79,13 +73,6 @@ const Register = () => {
             </span>
           )}
         </div>
-        <Input
-          label="name"
-          error={errors.name}
-          value={credentials.name}
-          onChange={handleChange}
-          placeholder="Your full name"
-        />
         <Input
           label="username"
           error={errors.username}

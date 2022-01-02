@@ -40,7 +40,7 @@ const Home = () => {
     <div className="home-container">
       <div className="home-appbar">
         <h3>
-          Hello , <span>{user.name}</span>
+          Hello , <span>{user.username}</span>
         </h3>
         <button className="home-warning" onClick={deleteUser}>
           Deregister
